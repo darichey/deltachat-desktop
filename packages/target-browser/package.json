@@ -12,7 +12,10 @@
     "build:runtime-impl": "pnpm esbuild --format=esm --bundle --minify --keep-names --sourcemap --outdir=./dist runtime-browser/runtime.ts",
     "build:compose-frontend": "node ../../bin/copy.js ../frontend/html-dist ./dist && node ../../bin/copy.js ./static ./dist && pnpm build:runtime-impl",
     "start": "pnpm run build && node dist/server.js",
-    "start:server": "node dist/server.js"
+    "start:server": "node dist/server.js",
+    "dev": "concurrently \"pnpm dev:backend\" \"pnpm dev:frontend\"",
+    "dev:backend": "pnpm build:backend && node dist/server.js",
+    "dev:frontend": "vite --config vite.config.ts"
   },
   "dependencies": {
     "@deltachat-desktop/runtime-interface": "link:../runtime",
@@ -32,7 +35,10 @@
     "@types/node": "^20.14.13",
     "@types/resolve-path": "^1.4.2",
     "@types/ws": "^8.5.12",
+    "@vitejs/plugin-react": "^4.2.0",
+    "concurrently": "^8.2.0",
     "error-stack-parser": "^2.1.4",
-    "esbuild": "^0.25.0"
+    "esbuild": "^0.25.0",
+    "vite": "^5.2.0"
   }
 }

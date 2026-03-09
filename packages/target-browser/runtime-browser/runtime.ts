@@ -34,9 +34,16 @@ const { WebsocketTransport } = yerpc
 
 let logJsonrpcConnection = false
 
+// Determine WebSocket URL dynamically based on current location
+// This allows the runtime to work both in production (direct access) and in development (proxied through Vite)
+function getWebSocketBaseUrl(): string {
+  const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
+  return `${protocol}//${location.host}`
+}
+
 class BrowserTransport extends WebsocketTransport {
   constructor(private callCounterFunction: (label: string) => void) {
-    super('wss://localhost:3000/ws/dc')
+    super(`${getWebSocketBaseUrl()}/ws/dc`)
   }
 
   protected _onmessage(message: yerpc.Message): void {
@@ -83,7 +90,7 @@ class BrowserRuntime implements Runtime {
   socket: WebSocket
   private rc_config: RC_Config | null = null
   constructor() {
-    this.socket = new WebSocket('wss://localhost:3000/ws/backend')
+    this.socket = new WebSocket(`${getWebSocketBaseUrl()}/ws/backend`)
 
     this.socket.addEventListener('open', () => {
       // eslint-disable-next-line no-console
