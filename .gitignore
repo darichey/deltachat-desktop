@@ -88,6 +88,8 @@ deltachat-rpc-server-aarch64-macos
 
 # nix files
 default.nix
+.devenv/
+devenv.lock
 
 target
 packages/target-tauri/src-tauri/target
